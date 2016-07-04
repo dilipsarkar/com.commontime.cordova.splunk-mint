@@ -39,7 +39,7 @@ plugins.splunkmint.start(successCallback, errorCallback, apiKey, extraData)
 
 ### plugins.splunkmint.crash
 
-_This function is used purely for testing — do __not__ use in a released app_. On iOS, it will crash the app with a segmentation violation (SIGSEGV). When the app is restated, an error report should be uploaded to the Splunk Mint website.
+_This function is used purely for testing — do NOT use in a released app_. On iOS, it will crash the app with a segmentation violation (SIGSEGV). When the app is restated, an error report should be uploaded to the Splunk Mint website.
 
 ```javascript
 function successCallback () {
