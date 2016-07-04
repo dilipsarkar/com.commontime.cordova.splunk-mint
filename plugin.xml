@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        id="com.commontime.cordova.splunk-mint"
+        version="1.0.0">
+
+  <name>Secure Settings</name>
+  <description>CommonTime plugin for Splunk Mint.</description>
+
+  <engines>
+    <engine name="cordova" version=">=4.1.1"/>
+  </engines>
+
+  <js-module src="www/splunkmint.js" name="SplunkMint">
+    <clobbers target="plugins.splunkmint" />
+  </js-module>
+
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="SplunkMint">
+        <param name="onload" value="true" />
+        <param name="ios-package" value="CTSplunkMintPlugin"/>
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/CTSplunkMintPlugin.h"/>
+    <source-file src="src/ios/CTSplunkMintPlugin.m"/>
+
+    <framework src="src/ios/SplunkMint.framework" custom="true"/>
+    <framework src="libz.dylib"/>
+    <framework src="SystemConfiguration.framework"/>
+    <framework src="CoreTelephony.framework"/>
+  </platform>
+</plugin>
