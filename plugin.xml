@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         id="com.commontime.cordova.splunk-mint"
-        version="1.0.0">
+        version="1.0.1">
 
   <name>Splunk MINT</name>
   <description>CommonTime plugin for Splunk Mint.</description>
@@ -30,20 +30,20 @@
     <framework src="SystemConfiguration.framework"/>
     <framework src="CoreTelephony.framework"/>
   </platform>
-  
+
   <platform name="android">
     <framework src="gradle/build-extras.gradle" custom="true" type="gradleReference" />
     <framework src="com.splunk.mint:mint:5.0.0" />
-    
+
     <config-file target="res/xml/config.xml" parent="/*">
 	  <feature name="SplunkMint">
 	    <param name="android-package" value="com.commontime.mdesign.plugins.splunkmint.SplunkMint"/>
         <param name="onload" value="true" />
       </feature>
     </config-file>
-      
+
     <source-file src="src/android/com/commontime/mdesign/cordova/plugins/splunkmint/SplunkMint.java" target-dir="src/com/commontime/mdesign/plugins/splunkmint/"/>
-      
+
   </platform>
-  
+
 </plugin>

@@ -53,8 +53,6 @@ function errorCallback (message) {
 plugins.splunkmint.crash(successCallback, errorCallback)
 ```
 
-## Android only calls
-
 ### plugins.splunkmint.enableLogCat
 
 Enables a limited logcat to be sent along with a crash.
@@ -79,7 +77,7 @@ plugins.splunkmint.enableLogCat(successCallback, errorCallback, options);
 
 ### plugins.splunkmint.leaveBreadcrumb
 
-Add a breadcrumb to a potential crash report
+Add a breadcrumb to a potential crash report.
 
 ```javascript
 function successCallback () {
@@ -95,7 +93,7 @@ plugins.splunkmint.leaveBreadcrumb(successCallback, errorCallback, "opened page 
 
 ### plugins.splunkmint.logEvent
 
-Log an event
+Log an event.
 
 ```javascript
 function successCallback () {
@@ -111,7 +109,7 @@ plugins.splunkmint.logEvent(successCallback, errorCallback, "Logged in");
 
 ### plugins.splunkmint.logView
 
-Log an view
+Log a view.
 
 ```javascript
 function successCallback () {
@@ -127,7 +125,7 @@ plugins.splunkmint.logView(successCallback, errorCallback, "View X");
 
 ### plugins.splunkmint.getTotalCrashesNum
 
-Get the number of crashes since install
+Get the number of crashes since install. On iOS, this always returns `0`.
 
 ```javascript
 function successCallback (value) {
@@ -143,7 +141,7 @@ plugins.splunkmint.getTotalCrashesNum(successCallback, errorCallback);
 
 ### plugins.splunkmint.getLastCrashID
 
-Log an view
+Gets the ID of the last crash or `null` if there wasn't one. On iOS, this always returns `null`.
 
 ```javascript
 function successCallback (crashId) {
@@ -159,7 +157,7 @@ plugins.splunkmint.getLastCrashID(successCallback, errorCallback);
 
 ### plugins.splunkmint.transactionStart
 
-Start a transaction
+Start a transaction with a given name.
 
 ```javascript
 function successCallback () {
@@ -175,7 +173,7 @@ plugins.splunkmint.startTransaction(successCallback, errorCallback, "RequestX");
 
 ### plugins.splunkmint.transactionStop
 
-Stop a transaction
+Stop the transaction with the given name.
 
 ```javascript
 function successCallback () {
@@ -191,7 +189,7 @@ plugins.splunkmint.transactionStop(successCallback, errorCallback, "RequestX");
 
 ### plugins.splunkmint.transactionCancel
 
-Cancel a transaction
+Cancel the transaction with the given name for the given reason.
 
 ```javascript
 function successCallback () {
@@ -212,7 +210,7 @@ plugins.splunkmint.transactionCancel(successCallback, errorCallback, options);
 
 ### plugins.splunkmint.flush
 
-Flush pending items
+Flush pending items.
 
 ```javascript
 function successCallback () {
@@ -244,7 +242,7 @@ plugins.splunkmint.enableDebugLog(successCallback, errorCallback);
 
 ### plugins.splunkmint.log
 
-Write a log line
+Write a log message from a given source at a specified level. Valid levels are `"v"` (verbose), `"d"` (debug, the default), `"i"` (info), `"w"` (warning) and `"e"` (error). Note on iOS `"v"` is the same as `"w"` and the `tag` field is ignored.
 
 ```javascript
 function successCallback () {
@@ -258,7 +256,7 @@ function errorCallback (message) {
 var options = {
   'tag': 'MyApp',
   'msg': 'Started loading screen...',
-  'lvl': 'i'
+  'priority': 'i'
 };
 
 plugins.splunkmint.log(successCallback, errorCallback, options);
