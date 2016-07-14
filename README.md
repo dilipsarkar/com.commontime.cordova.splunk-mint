@@ -244,7 +244,7 @@ plugins.splunkmint.enableDebugLog(successCallback, errorCallback);
 
 ### plugins.splunkmint.log
 
-Enable debug logging
+Write a log line
 
 ```javascript
 function successCallback () {
