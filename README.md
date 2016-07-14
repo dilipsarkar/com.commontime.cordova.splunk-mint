@@ -55,7 +55,7 @@ plugins.splunkmint.crash(successCallback, errorCallback)
 
 ### plugins.splunkmint.enableLogCat
 
-Enables a limited logcat to be sent along with a crash.
+Enables a limited logcat to be sent along with a crash. _Android only_.
 
 ```javascript
 function successCallback () {
