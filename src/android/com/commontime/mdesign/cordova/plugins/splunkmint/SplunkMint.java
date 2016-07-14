@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 
 public class SplunkMint extends CordovaPlugin {
@@ -41,6 +40,7 @@ public class SplunkMint extends CordovaPlugin {
     private static final String GET_LAST_CRASH_ID = "getLastCrashId";
     private static final String LOG_VIEW = "logView";
     private static final String FLUSH = "flush";
+    private static final String TAG1 = "tag";
 
     @Override
     protected void pluginInitialize() {
@@ -150,12 +150,11 @@ public class SplunkMint extends CordovaPlugin {
             return true;
         } else if( action.equals(LOG)) {
             JSONObject jso = args.getJSONObject(0);
-            String tag = jso.getString(TAG);
+            String tag = jso.getString(TAG1);
             String msg = jso.getString(MSG);
             String lvl = jso.optString(PRIORITY, "d");
             try {
-                Method method = MintLog.class.getMethod(lvl, String.class, String.class);
-                method.invoke(null, tag, msg);
+                MintLog.class.getMethod(lvl, String.class, String.class).invoke(null, tag, msg);
                 callbackContext.success();
                 return true;
             } catch (NoSuchMethodException e) {
