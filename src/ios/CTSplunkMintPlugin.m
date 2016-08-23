@@ -18,7 +18,7 @@
   if ([self.viewController isKindOfClass: [CDVViewController class]])
   {
     NSDictionary* settings = ((CDVViewController*) self.viewController).settings;
-    NSString* apiKey = [settings objectForKey: @"splunk_api_key"];
+    NSString* apiKey = [settings objectForKey: @"splunk_ios_api_key"];
     NSString* extraDataString = [settings objectForKey: @"splunk_extra_data"];
     
     if (extraDataString.length > 0)
@@ -55,73 +55,6 @@
       [Mint sharedInstance].applicationEnvironment = SPLAppEnvRelease;
       [[Mint sharedInstance] initAndStartSessionWithAPIKey: apiKey];
     }
-  }
-}
-
-- (void) start: (CDVInvokedUrlCommand*) command
-{
-  @try
-  {
-    if ([Mint sharedInstance].isSessionActive)
-    {
-      NSLog(@"Splunk Mint is already started");
-     
-      CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
-      
-      [self.commandDelegate sendPluginResult: result callbackId: command.callbackId];
-
-      return;
-    }
-
-    NSString* apiKey = nil;
-    
-    if (command.arguments.count > 0 && [command.arguments[0] isKindOfClass: [NSString class]])
-    {
-      apiKey = command.arguments[0];
-    }
-    
-    if (command.arguments.count > 1 && [command.arguments[1] isKindOfClass: [NSString class]])
-    {
-      NSDictionary* dictionary = command.arguments[1];
-      MintLimitedExtraData* extraData = [[MintLimitedExtraData alloc] init];
-      
-      for (id key in [dictionary allKeys])
-      {
-        if ([key isKindOfClass: [NSString class]])
-        {
-          id value = [dictionary objectForKey: key];
-          
-          if ([value isKindOfClass: [NSString class]])
-          {
-            [extraData setValue: value forKey: key];
-          }
-        }
-      }
-    }
-    
-    if (apiKey.length == 0)
-    {
-      CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR
-                                                  messageAsString: @"missing API key"];
-      
-      [self.commandDelegate sendPluginResult: result callbackId: command.callbackId];
-    }
-    else
-    {
-      [Mint sharedInstance].applicationEnvironment = SPLAppEnvRelease;
-      [[Mint sharedInstance] initAndStartSessionWithAPIKey: apiKey];
-      
-      CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
-      
-      [self.commandDelegate sendPluginResult: result callbackId: command.callbackId];
-    }
-  }
-  @catch (NSException *exception)
-  {
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR
-                                                messageAsString: [exception reason]];
-    
-    [self.commandDelegate sendPluginResult: result callbackId: command.callbackId];
   }
 }
 

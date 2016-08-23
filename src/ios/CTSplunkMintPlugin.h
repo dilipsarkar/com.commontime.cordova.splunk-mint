@@ -10,8 +10,6 @@
 
 @interface CTSplunkMintPlugin : CDVPlugin
 
-- (void) start: (CDVInvokedUrlCommand*) command;
-
 - (void) crash: (CDVInvokedUrlCommand*) command;
 
 - (void) leaveBreadcrumb: (CDVInvokedUrlCommand*) command;
