@@ -44,7 +44,7 @@ public class SplunkMint extends CordovaPlugin {
 
     @Override
     protected void pluginInitialize() {
-        String api_key = preferences.getString("splunk_api_key", "");
+        String api_key = preferences.getString("splunk_android_api_key", "");
         String extra_data = preferences.getString("splunk_extra_data", "");
         initSplunk(api_key, extra_data);
     }
@@ -74,13 +74,7 @@ public class SplunkMint extends CordovaPlugin {
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-        if( action.equals(START) ) {
-            String api_key = args.getString(0);
-            String extra_data = args.getString(1);
-            initSplunk(api_key, extra_data);
-            callbackContext.success();
-            return true;
-        } else if( action.equals(CRASH)) {
+        if( action.equals(CRASH)) {
             Handler handler = new Handler();
             handler.post(new Runnable() {
                 @Override
