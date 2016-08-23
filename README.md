@@ -13,7 +13,7 @@ There are three preferences available for configuration in the `config.xnl` file
 For example:
 
 ```xml
-<preference name="splunk_ios_android_key" value="f25257f1"/>
+<preference name="splunk_android_key" value="f25257f1"/>
 <preference name="splunk_ios_api_key" value="b2c251f8"/>
 <preference name="splunk_extra_data" value="{'user': 'gary'}"/>
 ```
