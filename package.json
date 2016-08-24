@@ -1,0 +1,21 @@
+
+{
+  "name": "com.commontime.cordova.splunk-mint",
+  "version": "1.0.2",
+  "description": "CommonTime plugin for Splunk Mint.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/commontime/com.commontime.cordova.splunk-mint.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache v2",
+  "bugs": {
+    "url": "https://github.com/commontime/com.commontime.cordova.splunk-mint/issues"
+  },
+  "homepage": "https://github.com/commontime/com.commontime.cordova.splunk-mint#readme"
+}
