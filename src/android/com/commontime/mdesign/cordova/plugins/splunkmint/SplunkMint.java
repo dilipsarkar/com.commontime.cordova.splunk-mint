@@ -52,6 +52,7 @@ public class SplunkMint extends CordovaPlugin {
     private void initSplunk(String api_key, String extra_data) {
         if( api_key != null && !api_key.isEmpty() ) {
             try {
+                Mint.disableNetworkMonitoring();
                 Mint.initAndStartSession(cordova.getActivity(), api_key );
                 if( extra_data != null && !extra_data.isEmpty() ) {
                     JSONObject jso = new JSONObject(extra_data);
