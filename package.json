@@ -1,7 +1,7 @@
 
 {
   "name": "com.commontime.cordova.splunk-mint",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "CommonTime plugin for Splunk Mint.",
   "main": "index.js",
   "scripts": {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         id="com.commontime.cordova.splunk-mint"
-        version="1.0.4">
+        version="1.0.5">
 
   <name>Splunk MINT</name>
   <description>CommonTime plugin for Splunk Mint.</description>
@@ -25,7 +25,7 @@
     <header-file src="src/ios/CTSplunkMintPlugin.h"/>
     <source-file src="src/ios/CTSplunkMintPlugin.m"/>
 
-    <framework src="src/ios/SplunkMint.framework" custom="true"/>
+    <source-file src="src/ios/SplunkMint.framework" framework="true"/>
     <framework src="libz.dylib"/>
     <framework src="SystemConfiguration.framework"/>
     <framework src="CoreTelephony.framework"/>
