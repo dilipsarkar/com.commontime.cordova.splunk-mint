@@ -2,7 +2,7 @@
 //  SplunkEnums.h
 //  SplunkMint
 //
-//  Copyright (c) 2013 Splunk. All rights reserved.
+//  Copyright (c) 2016 Splunk. All rights reserved.
 //
 
 

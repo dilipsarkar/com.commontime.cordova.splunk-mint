@@ -2,7 +2,7 @@
 //  MintWKWebView.h
 //  SplunkMint
 //
-//  Copyright (c) 2015 Splunk. All rights reserved.
+//  Copyright (c) 2016 Splunk. All rights reserved.
 //
 
 #import <WebKit/WebKit.h>

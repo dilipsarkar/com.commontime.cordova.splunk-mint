@@ -19,8 +19,13 @@
   {
     NSDictionary* settings = ((CDVViewController*) self.viewController).settings;
     NSString* apiKey = [settings objectForKey: @"splunk_ios_api_key"];
+
+    NSString* hecUrl = [settings objectForKey: @"splunk_hec_url"];
+    NSString* hecToken = [settings objectForKey: @"splunk_hec_token"];
+
     NSString* extraDataString = [settings objectForKey: @"splunk_extra_data"];
-    
+
+
     if (extraDataString.length > 0)
     {
       extraDataString = [extraDataString stringByReplacingOccurrencesOfString: @"'" withString: @"\""];
@@ -55,7 +60,11 @@
       [Mint sharedInstance].applicationEnvironment = SPLAppEnvRelease;
       [[Mint sharedInstance] initAndStartSessionWithAPIKey: apiKey];
     }
-  }
+    else if(hecUrl.lenght > 0 && hecToken.lenght > 0 )
+    {
+      [Mint sharedInstance].applicationEnvironment = SPLAppEnvRelease;
+      [[Mint sharedInstance] initAndStartSessionWithHECUrl:hecUrl token:hecToken];
+    }
 }
 
 - (void) crash: (CDVInvokedUrlCommand*) command

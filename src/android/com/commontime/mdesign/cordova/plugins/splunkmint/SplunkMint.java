@@ -45,11 +45,16 @@ public class SplunkMint extends CordovaPlugin {
     @Override
     protected void pluginInitialize() {
         String api_key = preferences.getString("splunk_android_api_key", "");
+
+        String hec_url = preferences.getString("splunk_hec_url", "");
+        String hec_token = preferences.getString("splunk_hec_token", "");
+
         String extra_data = preferences.getString("splunk_extra_data", "");
-        initSplunk(api_key, extra_data);
+
+        initSplunk(api_key, extra_data, hec_url, hec_token);
     }
 
-    private void initSplunk(String api_key, String extra_data) {
+    private void initSplunk(String api_key, String extra_data, String hec_url, String hec_token) {
         if( api_key != null && !api_key.isEmpty() ) {
             try {
                 Mint.disableNetworkMonitoring();
@@ -71,6 +76,29 @@ public class SplunkMint extends CordovaPlugin {
                 e.printStackTrace();
             }
         }
+        else if( hec_url != null && !hec_url.isEmpty() && hec_token != null && !hec_token.isEmpty()) {
+            try {
+                Mint.disableNetworkMonitoring();
+                Mint.initAndStartSessionHEC(cordova.getActivity(), hec_url, hec_token );
+                if( extra_data != null && !extra_data.isEmpty() ) {
+                    JSONObject jso = new JSONObject(extra_data);
+                    Iterator<String> keyIter = jso.keys();
+                    while( keyIter.hasNext() ) {
+                        String key = keyIter.next();
+                        String val = jso.getString(key);
+                        Mint.addExtraData(key, val);
+                    }
+				}
+            } catch( IllegalArgumentException e ) {
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {

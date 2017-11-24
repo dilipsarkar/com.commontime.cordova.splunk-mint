@@ -4,10 +4,16 @@ The Splunk Mint plugin provides a way of integrating Splunk Mint crash reporting
 
 ## Configuration via config.xml
 
-There are three preferences available for configuration in the `config.xnl` file:
+There are 5 preferences available for configuration in the `config.xnl` file:
 
 * `splunk_android_api_key`, which specifies the Splunk API key for Android.
 * `splunk_ios_api_key`, which specifies the Splunk API key for iOS.
+
+As alternative to the splunk cloud you can use your own HTTPEventCollector
+* `splunk_hec_url`, which specifiy your url to your HTTPEventCollector
+* `splunk_hec_url`, which specifiy your Token to access your HTTPEventCollector
+
+And submit some extra data
 * `splunk_extra_data`, which specifies any extra data to be uploaded in the event of a crash; this is a string representation of a JSON object whose values are all strings.
 
 For example:
@@ -15,6 +21,8 @@ For example:
 ```xml
 <preference name="splunk_android_key" value="f25257f1"/>
 <preference name="splunk_ios_api_key" value="b2c251f8"/>
+<preference name="splunk_hec_url" value="https://yourserver/services/collector/mint"/>
+<preference name="splunk_hec_token" value="ljylfushfsjkhpo"/>
 <preference name="splunk_extra_data" value="{'user': 'gary'}"/>
 ```
 

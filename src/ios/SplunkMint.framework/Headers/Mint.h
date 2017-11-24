@@ -5,8 +5,12 @@
 //  Copyright (c) 2016 Splunk. All rights reserved.
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+#include <pthread.h>
 #import "MintLimitedExtraData.h"
 #import "MintEnums.h"
+#import "MintUtilities.h"
+
 
 
 /**
@@ -19,6 +23,28 @@
  *  @return void. Nothing to return.
  */
 #define MintLogException(exception, extradata) [[Mint sharedInstance] logException:exception extraData:extradata];
+
+/**
+ *MINT_METHOD_TRACE_START and MINT_METHOD_TRACE_STOP macro logs a method invocation with class name, method name and elapsed time.
+ *If you are not using ARC, use MINT_NONARC_METHOD_TRACE_STOP macro to avoid memory leaks when you stop the trace.
+ */
+#define MINT_METHOD_TRACE_START \
+NSMutableDictionary *mintTraceInfo = [[NSMutableDictionary alloc] init];\
+[mintTraceInfo setObject:[NSString stringWithFormat:@"%s", __FUNCTION__] forKey:@"method"];\
+[mintTraceInfo setObject:@(getCurrentTimeInNanos()) forKey:@"startTime"];\
+[mintTraceInfo setObject:@(pthread_mach_thread_np(pthread_self())) forKey:@"threadID"];\
+
+
+#define MINT_METHOD_TRACE_STOP \
+[mintTraceInfo setObject:@(getCurrentTimeInNanos()) forKey:@"endTime"];\
+[[Mint sharedInstance] logMethodTrace:mintTraceInfo];\
+
+#define MINT_NONARC_METHOD_TRACE_STOP \
+[mintTraceInfo setObject:@(getCurrentTimeInNanos()) forKey:@"endTime"];\
+[[Mint sharedInstance] logMethodTrace:mintTraceInfo];\
+[mintTraceInfo release];\
+mintTraceInfo = nil;\
+
 
 /**
  *  Predefined application environments.
@@ -85,16 +111,40 @@ extern NSString * const SPLAppEnvDevelopment;
  */
 @property (nonatomic, strong) NSString* applicationEnvironment;
 
-/**
- * Disables the crash reporter.
- *
- */
-- (void) disableCrashReporter;
 
 /**
  * Sends all cached requests to the server.
  */
 - (void) flush;
+
+/**
+ * Disables the crash reporter.Call this method before calling
+ * **initAndStartSessionWithAPIKey** or **initAndStartSessionWithHECUrl**.
+ *
+ */
+- (void) disableCrashReporter;
+
+
+/**
+ *  Disables network monitoring. Call this method before calling
+ * **initAndStartSessionWithAPIKey** or **initAndStartSessionWithHECUrl**.
+ */
+- (void) disableNetworkMonitoring;
+
+/**
+ * Disables View  monitoring. Call this method before calling
+ * **initAndStartSessionWithAPIKey** or **initAndStartSessionWithHECUrl**.
+ */
+
+- (void) disableViewMonitoring;
+
+/**
+ * Disables memory warning monitoring.Call this method before calling
+ * **initAndStartSessionWithAPIKey** or **initAndStartSessionWithHECUrl**.
+ */
+
+- (void) disableMemoryWarningMonitoring;
+
 
 
 #pragma mark *** Initialize Mint SDK ***
@@ -171,11 +221,6 @@ extern NSString * const SPLAppEnvDevelopment;
  */
 - (void) logException: (NSException*)exception extraData: (MintLimitedExtraData*)extraDataDictionary;
 
-/**
- *  Disables network monitoring. Call this method before calling 
- * **initAndStartSessionWithAPIKey** or **initAndStartSessionWithHECUrl**.
- */
-- (void) disableNetworkMonitoring;
 
 /**
  *  Gets the developer's remote settings as key-value pairs.
@@ -214,79 +259,83 @@ extern NSString * const SPLAppEnvDevelopment;
 - (void) setLogging:(NSInteger)linesCount;
 
 /**
- *  Starts a transaction with a unique name.
+ *  Starts a named transaction.
  *
- *  @param transactionName The unique transaction name.
+ *  @param transactionName The transaction name.
+ *  @returns                The transaction ID
+ *
  */
-- (void) transactionStart:(NSString*)transactionName;
+- (NSString*) transactionStart:(NSString*)transactionName;
 
 /**
- *  Starts a transaction with a unique name and attaches extra data to the request.
+ *  Starts a named transaction and attaches extra data to the request.
  *
- *  @param transactionName  The unique transaction name.
+ *  @param transactionName  The transaction name.
  *  @param key              The key for the extra data.
  *  @param value            The value of the extra data.
+ *  @returns                The transaction ID
  */
-- (void) transactionStart:(NSString*)transactionName extraDataKey: (NSString*)key extraDataValue: (NSString*)value;
+- (NSString*) transactionStart:(NSString*)transactionName extraDataKey: (NSString*)key extraDataValue: (NSString*)value;
 
 /**
- *  Starts a transaction with a unique name and attaches extra data to the request.
+ *  Starts a named transaction and attaches extra data to the request.
  *
- *  @param transactionName      The unique transaction name.
+ *  @param transactionName      The transaction name.
  *  @param extraDataDictionary  A **MintLimitedExtraData** instance containing extra data.
+ *  @returns                    The transaction ID
  */
-- (void) transactionStart:(NSString*)transactionName extraData: (MintLimitedExtraData*)extraDataDictionary;
+- (NSString*) transactionStart:(NSString*)transactionName extraData: (MintLimitedExtraData*)extraDataDictionary;
 
 /**
  *  Stops a transaction.
  *
- *  @param transactionName The name of the transaction.
+ *  @param transactionID The ID of the transaction.
  */
-- (void) transactionStop:(NSString*)transactionName;
+- (void) transactionStop:(NSString*)transactionID;
 
 /**
  *  Stops a transaction and attaches extra data to the request.
  *
- *  @param transactionName  The name of the transaction.
+ *  @param transactionID    The ID of the transaction.
  *  @param key              The key for the extra data.
  *  @param value            The value of the extra data.
  */
-- (void) transactionStop:(NSString*)transactionName extraDataKey: (NSString*)key extraDataValue: (NSString*)value;
+- (void) transactionStop:(NSString*)transactionID extraDataKey: (NSString*)key extraDataValue: (NSString*)value;
 
 /**
  *  Stops a transaction and attaches extra data to the request.
  *
- *  @param transactionName      The name of the transaction.
+ *  @param transactionID        The ID of the transaction.
  *  @param extraDataDictionary  A **MintLimitedExtraData** instance containing extra data.
  */
-- (void) transactionStop:(NSString*)transactionName extraData: (MintLimitedExtraData*)extraDataDictionary;
+- (void) transactionStop:(NSString*)transactionID extraData: (MintLimitedExtraData*)extraDataDictionary;
 
 /**
  *  Cancels a transaction.
  *
- *  @param transactionName The name of the transaction.
+ *  @param transactionID   The ID of the transaction.
  *  @param aReason         The reason for cancelling the transaction.
  */
-- (void) transactionCancel:(NSString*)transactionName reason:(NSString*)aReason;
+- (void) transactionCancel:(NSString*)transactionID reason:(NSString*)aReason;
 
 /**
  *  Cancels a transaction and attaches extra data to the request.
  *
- *  @param transactionName  The name of the transaction.
+ *  @param transactionID    The ID of the transaction.
  *  @param aReason          The reason for cancelling the transaction.
  *  @param key              The key for the additional extra data.
  *  @param value            The value of the additional extra data.
  */
-- (void) transactionCancel:(NSString*)transactionName reason:(NSString*)aReason extraDataKey: (NSString*)key extraDataValue: (NSString*)value;
+- (void) transactionCancel:(NSString*)transactionID reason:(NSString*)aReason extraDataKey: (NSString*)key extraDataValue: (NSString*)value;
 
 /**
  *  Cancels a transaction and attaches extra data to the request.
  *
- *  @param transactionName      The name of the transaction.
+ *  @param transactionID        The ID of the transaction.
  *  @param aReason              The reason for cancelling the transaction.
  *  @param extraDataDictionary  A **MintLimitedExtraData** instance containing extra data.
  */
-- (void) transactionCancel:(NSString*)transactionName reason:(NSString*)aReason extraData: (MintLimitedExtraData*)extraDataDictionary;
+- (void) transactionCancel:(NSString*)transactionID reason:(NSString*)aReason extraData: (MintLimitedExtraData*)extraDataDictionary;
 
 /**
  *  Adds a URL to the network monitoring blacklist.
@@ -443,5 +492,54 @@ void MintLog(MintLogLevel logLevel, NSString* message, ...) NS_FORMAT_FUNCTION(2
  * Gets the global extra data collection.
  */
 - (NSDictionary*)extraData;
+
+/**
+ * Starts a timer. 
+ * @param timerName The name of the timer. 
+ * @return The timer ID.
+ */
+- (NSString*)startTimerWithName:(NSString*)timerName;
+
+/**
+ * Stops a timer.
+ * @param timerId The timer ID.
+ */
+- (void)stopTimerWithId:(NSString*)timerId;
+
+/**
+ *  Used internally by the SDK to log trace information for methods.
+ * @param traceInfo The trace information.
+ */
+- (void)logMethodTrace:(NSDictionary*)traceInfo;
+
+/**
+ * Used internally by the SDK to log memory information when memory warnings
+ * are received. 
+ * @param className The name of the class that received a memory warning.
+ */
+- (void)logMemoryWarningWithClassName:(NSString*)className;
+
+/**
+ * Sets the location
+ *
+ * @param location CLLocation instance.
+ */
+
+- (void)setLocation:(CLLocation*)location;
+
+/**
+ * Set the minimum interval of auto flush.
+ *
+ * @param interval The minimum interval of auto flush, in seconds.
+ */
+
+- (void)setAutoFlushMinimumInterval:(NSTimeInterval)interval;
+
+/*
+ * Disable auto flush, should be called before SDK initialization.
+ *
+ */
+
+- (void)disableAutoFlush;
 
 @end
