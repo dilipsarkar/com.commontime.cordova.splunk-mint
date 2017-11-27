@@ -1,5 +1,5 @@
 repositories {
     maven {
-        url "https://mint.splunk.com/gradle/"
+         url uri('mint-plugin-repo-5.2.2')
     }
 }

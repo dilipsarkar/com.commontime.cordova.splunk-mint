@@ -25,7 +25,7 @@
     <header-file src="src/ios/CTSplunkMintPlugin.h"/>
     <source-file src="src/ios/CTSplunkMintPlugin.m"/>
 
-    <source-file src="src/ios/SplunkMint.framework" framework="true"/>
+    <source-file src="src/ios/SplunkMint.framework" custom="true" framework="true"/>
     <framework src="libz.dylib"/>
     <framework src="SystemConfiguration.framework"/>
     <framework src="CoreTelephony.framework"/>
@@ -33,7 +33,7 @@
 
   <platform name="android">
     <framework src="gradle/build-extras.gradle" custom="true" type="gradleReference" />
-    <framework src="com.splunk.mint:mint:5.2.2" />
+    <lib-file src="lib/android/.jar"/>
 
     <config-file target="res/xml/config.xml" parent="/*">
 	  <feature name="SplunkMint">
