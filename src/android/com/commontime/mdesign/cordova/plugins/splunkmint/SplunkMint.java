@@ -58,7 +58,7 @@ public class SplunkMint extends CordovaPlugin {
         if( api_key != null && !api_key.isEmpty() ) {
             try {
                 Mint.disableNetworkMonitoring();
-                Mint.initAndStartSession(cordova.getActivity(), api_key );
+                Mint.initAndStartSession(cordova.getActivity().getApplication(), api_key );
                 if( extra_data != null && !extra_data.isEmpty() ) {
                     JSONObject jso = new JSONObject(extra_data);
                     Iterator<String> keyIter = jso.keys();
@@ -79,7 +79,7 @@ public class SplunkMint extends CordovaPlugin {
         else if( hec_url != null && !hec_url.isEmpty() && hec_token != null && !hec_token.isEmpty()) {
             try {
                 Mint.disableNetworkMonitoring();
-                Mint.initAndStartSessionHEC(cordova.getActivity(), hec_url, hec_token );
+                Mint.initAndStartSessionHEC(cordova.getActivity().getApplication(), hec_url, hec_token );
                 if( extra_data != null && !extra_data.isEmpty() ) {
                     JSONObject jso = new JSONObject(extra_data);
                     Iterator<String> keyIter = jso.keys();
