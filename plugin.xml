@@ -32,8 +32,8 @@
   </platform>
 
   <platform name="android">
-    <framework src="gradle/build-extras.gradle" custom="true" type="gradleReference" />
-    <framework src="com.splunk.mint:mint:5.2.2" />
+
+    <lib-file src="lib/android/mint-android-sdk-5.2.2.jar"/>
 
     <config-file target="res/xml/config.xml" parent="/*">
 	  <feature name="SplunkMint">
